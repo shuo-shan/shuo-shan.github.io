@@ -57,7 +57,7 @@ ui <- fluidPage(
     sidebarPanel(width = 3,
         selectInput(inputId = "model",
                     label = "Select Model",
-                    choices = c("Linear Regression", "ARIMA", "Holt-Winters"),
+                    choices = c("Linear Regression"),
                     selected = "Linear Regression"),
         # Linear Regression model arguments
         conditionalPanel(condition = "input.model == 'Linear Regression'",
@@ -66,52 +66,6 @@ ui <- fluidPage(
                          choices = list("Trend" = 1,
                                         "Seasonality" = 2),
                          selected = 1)),
-        # ARIMA model arguments
-        conditionalPanel(condition = "input.model == 'ARIMA'",
-                             h5("Order Parameters"),
-                              sliderInput(inputId = "p",
-                                          label = "p:",
-                                          min = 0,
-                                          max = 5,
-                                          value = 0),
-                            sliderInput(inputId = "d",
-                                          label = "d:",
-                                          min = 0,
-                                          max = 5,
-                                          value = 0),
-                            sliderInput(inputId = "q",
-                                          label = "q:",
-                                          min = 0,
-                                          max = 5,
-                                          value = 0),
-                            h5("Seasonal Parameters:"),
-                            sliderInput(inputId = "P",
-                                          label = "P:",
-                                          min = 0,
-                                          max = 5,
-                                          value = 0),
-                            sliderInput(inputId = "D",
-                                          label = "D:",
-                                          min = 0,
-                                          max = 5,
-                                          value = 0),
-                            sliderInput(inputId = "Q",
-                                          label = "Q:",
-                                          min = 0,
-                                          max = 5,
-                                          value = 0)
-        ),
-        # Holt Winters model arguments
-        conditionalPanel(condition = "input.model == 'Holt-Winters'",
-                         checkboxGroupInput(inputId = "hw_args",
-                         label = "Select Holt-Winters Parameters:",
-                         choices = list("Beta" = 2,
-                                        "Gamma" = 3),
-                         selected = c(1, 2, 3)),
-                          selectInput(inputId = "hw_seasonal",
-                                      label = "Select Seasonal Type:",
-                                      choices = c("Additive", "Multiplicative"),
-                                      selected = "Additive")),
 
         checkboxInput(inputId = "log",
                     label = "Log Transformation",
@@ -121,8 +75,6 @@ ui <- fluidPage(
                   min = 1,
                   max = 60,
                   value = 24)
-                #   actionButton(inputId = "update",
-                #                 label = "Update!")
 
     ),
 
@@ -169,48 +121,7 @@ server <- function(input, output) {
 
     # if adding a prediction intervals level argument set over here
     pi <- 0.95
-
-    # Holt-Winters model
-    if(input$model == "Holt-Winters"){
-       a <- b <- c <- NULL
-
-       if(!"2" %in% input$hw_args){
-        b <- FALSE
-       }
-
-       if(!"3" %in% input$hw_args){
-        c <- FALSE
-       }
-
-        md <- HoltWinters(d$air,
-                          seasonal = ifelse(input$hw_seasonal == "Additive", "additive", "multiplicative"),
-                          beta = b,
-                          gamma = c
-                          )
-        fc <- predict(md, n.ahead = input$h, prediction.interval = TRUE) |>
-                as.data.frame()
-        fc$index <- seq.Date(from = as.Date("1961-01-01"),
-                                  by = "month",
-                                  length.out = input$h)
-    # ARIMA model
-    } else if(input$model == "ARIMA"){
-
-        md <- arima(d$air,
-                    order = c(input$p, input$d, input$q),
-                    seasonal = list(order = c(input$P, input$D, input$Q))
-                          )
-        fc <- predict(md, n.ahead = input$h, prediction.interval = TRUE) |>
-                as.data.frame()
-        names(fc) <- c("fit", "se")
-
-        fc$index <- seq.Date(from = as.Date("1961-01-01"),
-                                  by = "month",
-                                  length.out = input$h)
-
-        fc$upr <- fc$fit + 1.96 * fc$se
-        fc$lwr <- fc$fit - 1.96 * fc$se
-    # Linear Regression model
-    } else if(input$model == "Linear Regression"){
+    if(input$model == "Linear Regression"){
 
         d_lm <- d$df
 
