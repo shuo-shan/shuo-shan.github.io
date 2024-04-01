@@ -9,7 +9,7 @@
 
 library(shiny)
 library(ggplot2)
-#load(file="./myapp/temp_test.RData")
+load(file="./myapp/temp_test.RData")
 
 # Define UI for application
 ui <- fluidPage(
