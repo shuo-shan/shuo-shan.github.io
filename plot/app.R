@@ -8,7 +8,7 @@
 #
 
 library(shiny)
-load("load_all.RData")
+this_table <- read.csv("data/table.txt",header=T,sep="\t")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -44,7 +44,7 @@ server <- function(input, output) {
         # draw the histogram with the specified number of bins
         hist(x, breaks = bins, col = 'darkgray', border = 'white',
              xlab = 'Waiting time to next eruption (in mins)',
-             main = paste0(BOU_BTI[1,6], ' Histogram of waiting times'))
+             main = paste0(this_table[1,]$Gene, ' Histogram of waiting times'))
     })
 }
 
