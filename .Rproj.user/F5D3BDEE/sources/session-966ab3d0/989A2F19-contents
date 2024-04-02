@@ -8,6 +8,7 @@
 #
 
 library(shiny)
+load.image("docs/temp_test.RData")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
