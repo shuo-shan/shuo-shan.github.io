@@ -8,8 +8,7 @@
 #
 
 library(shiny)
-myEnv <- new.env()
-load("docs/temp_test.RData", envir = myEnv)
+load("load_all.RData")
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -45,7 +44,7 @@ server <- function(input, output) {
         # draw the histogram with the specified number of bins
         hist(x, breaks = bins, col = 'darkgray', border = 'white',
              xlab = 'Waiting time to next eruption (in mins)',
-             main = paste0(myEnv$table[1,]$Gene, ' Histogram of waiting times'))
+             main = paste0(BOU_BTI[1,6], ' Histogram of waiting times'))
     })
 }
 
