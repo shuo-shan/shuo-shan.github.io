@@ -14,7 +14,7 @@ load("docs/temp_test.RData")
 ui <- fluidPage(
 
     # Application title
-    titlePanel("Old Faithful Geyser Data"),
+    titlePanel(paste0(table[1,]$Gene,": Old Faithful Geyser Data")),
 
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
