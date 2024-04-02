@@ -15,7 +15,7 @@ load("docs/temp_test.RData", envir = myEnv)
 ui <- fluidPage(
 
     # Application title
-    titlePanel(paste0(myEnv$table[1,]$Gene,": Old Faithful Geyser Data")),
+    titlePanel("Old Faithful Geyser Data"),
 
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
@@ -45,7 +45,7 @@ server <- function(input, output) {
         # draw the histogram with the specified number of bins
         hist(x, breaks = bins, col = 'darkgray', border = 'white',
              xlab = 'Waiting time to next eruption (in mins)',
-             main = 'Histogram of waiting times')
+             main = paste0(myEnv$table[1,]$Gene, ' Histogram of waiting times'))
     })
 }
 
