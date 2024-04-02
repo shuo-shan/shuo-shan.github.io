@@ -8,13 +8,14 @@
 #
 
 library(shiny)
-load("docs/temp_test.RData")
+myEnv <- new.env()
+load("docs/temp_test.RData", envir = myEnv)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
 
     # Application title
-    titlePanel(paste0(table[1,]$Gene,": Old Faithful Geyser Data")),
+    titlePanel(paste0(myEnv$table[1,]$Gene,": Old Faithful Geyser Data")),
 
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
